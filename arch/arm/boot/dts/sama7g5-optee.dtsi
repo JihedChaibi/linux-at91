@@ -1,0 +1,149 @@
+
+/ {
+	cpus {
+		cpu@0 {
+			enable-method = "psci";
+			cpu-idle-states = <&psci_standby>;
+		};
+
+		idle-states {
+			entry-method = "psci";
+
+			psci_standby: psci-standby {
+				compatible = "arm,idle-state";
+				idle-state-name = "psci,standby";
+				arm,psci-suspend-param = <0x0>;
+				local-timer-stop;
+				entry-latency-us = <1000>;
+				exit-latency-us = <700>;
+				min-residency-us = <2000>;
+			};
+		};
+	};
+
+	clocks {
+		/* Add dummy fixed-clock for TCB (see below) */
+		clk83m: clk83m {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <200000000>;
+		};
+		clk32kfixed: clk32kfixed {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <32768>;
+		};
+	};
+
+	reserved-memory {
+		ranges;
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		optee_core@60000000 {
+			no-map;
+			reg = <0x60000000 0x00800000>;
+		};
+		optee_shm@61000000 {
+			no-map;
+			reg = <0x61000000 0x00400000>;
+		};
+		scmi0_shmem: scmi0_shmem@61400000 {
+			compatible = "arm,scmi-shmem";
+			no-map;
+			reg = <0x61400000 0x80>;
+		};
+	};
+
+	psci {
+		sys_reset = <0x84000009>;
+		sys_poweroff = <0x84000008>;
+		cpu_on = <0x84000003>;
+		cpu_off = <0x84000002>;
+		cpu_suspend = <0x84000001>;
+		method = "smc";
+		compatible = "arm,psci-1.0", "arm,psci-0.2", "arm,psci";
+	};
+
+	firmware {
+		optee {
+			method = "smc";
+			compatible = "linaro,optee-tz";
+		};
+		scmi0 {
+			compatible = "arm,scmi-smc";
+			shmem = <&scmi0_shmem>;
+			arm,smc-id = <0x2000200>;
+			#address-cells = <0x01>;
+			#size-cells = <0x00>;
+
+			scmi0_clock: scmi0_clock@14 {
+				#clock-cells = <0x01>;
+				reg = <0x14>;
+			};
+		};
+	};
+
+	arm_smc_wdt {
+		compatible = "arm,smc-wdt";
+		arm,smc-id = <0x2000500>;
+		timeout-sec = <15>;
+	};
+};
+
+/* Disable clocks controllers as they are handled by OP-TEE */
+&clk32k {
+	status = "disabled";
+};
+
+&pmc {
+	status = "disabled";
+};
+
+&trng {
+	status = "disabled";
+};
+
+&rtc {
+	status = "disabled";
+};
+
+/* Use "syscon-smc" compatible to forward register access to OP-TEE */
+&sfr {
+	compatible = "atmel,sama5d2-sfr", "syscon-smc";
+	arm,smc-id = <0x02000300>;
+};
+
+/*
+ * Use fixed-clock for TCB since SCMI clocks are probed too late for
+ * clocksource
+ */
+&tcb0 {
+	clocks = <&clk83m>, <&clk83m>, <&clk83m>, <&clk32kfixed>;
+};
+
+&pioA {
+	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_PIOA_CLK>;
+};
+
+&flx3 {
+	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_UART3_CLK>;
+};
+
+&uart3 {
+	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_UART3_CLK>;
+};
+
+&sdmmc0 {
+	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_SDMMC0_HCLK &scmi0_clock AT91_SCMI_CLK_GCK_SDMMC0_GCLK>;
+	/delete-property/assigned-clocks;
+	/delete-property/assigned-clock-parents;
+	/delete-property/assigned-clock-rates;
+};
+
+&sdmmc1 {
+	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_SDMMC1_HCLK &scmi0_clock AT91_SCMI_CLK_GCK_SDMMC1_GCLK>;
+	/delete-property/assigned-clocks;
+	/delete-property/assigned-clock-parents;
+	/delete-property/assigned-clock-rates;
+};
