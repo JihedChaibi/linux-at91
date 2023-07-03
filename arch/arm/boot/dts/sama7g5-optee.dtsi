@@ -126,6 +126,15 @@
 	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_PIOA_CLK>;
 };
 
+&aes  { clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_AES_CLK>; };
+&sha  { clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_SHA_CLK>; };
+&tdes  { clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_TDES_CLK>; };
+
+&flx0  { clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_FLX0_CLK>; };
+&uart0 { clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_FLX0_CLK>; };
+&flx1  { clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_FLX1_CLK>; };
+&i2c1  { clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_FLX1_CLK>; };
+
 &flx3 {
 	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_UART3_CLK>;
 };
@@ -134,6 +143,24 @@
 	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_UART3_CLK>;
 };
 
+&flx4  { clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_FLX4_CLK>; };
+&uart4 { clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_FLX4_CLK>; };
+&flx7  { clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_FLX7_CLK>; };
+&uart7 { clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_FLX7_CLK>; };
+&flx8  { clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_FLX8_CLK>; };
+&i2c8  { clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_FLX8_CLK>; };
+&flx9  { clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_FLX9_CLK>; };
+&i2c9  { clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_FLX9_CLK>; };
+&flx11  { clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_FLX11_CLK>; };
+&spi11  { clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_FLX11_CLK>; };
+
+&qspi0 {
+	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_QSPI0_CLK>, <&scmi0_clock AT91_SCMI_CLK_GCK_QSPI0_GCLK>;
+};
+
+&qspi1 {
+	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_QSPI1_CLK>, <&scmi0_clock AT91_SCMI_CLK_GCK_QSPI1_GCLK>;
+};
 &sdmmc0 {
 	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_SDMMC0_HCLK &scmi0_clock AT91_SCMI_CLK_GCK_SDMMC0_GCLK>;
 	/delete-property/assigned-clocks;
@@ -146,4 +173,36 @@
 	/delete-property/assigned-clocks;
 	/delete-property/assigned-clock-parents;
 	/delete-property/assigned-clock-rates;
+};
+
+&i2c8 {
+	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_FLX8_CLK>;
+	status = "okay";
+};
+
+&gmac0 {
+	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_MACB0_CLK>, <&scmi0_clock AT91_SCMI_CLK_PERIPH_MACB0_CLK>, <&scmi0_clock AT91_SCMI_CLK_GCK_MACB0_GCLK>, <&scmi0_clock AT91_SCMI_CLK_GCK_MACB0_TSU>;
+	/delete-property/assigned-clocks;
+	/delete-property/assigned-clock-parents;
+	/delete-property/assigned-clock-rates;
+	status = "okay";
+};
+&dma0 {
+	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_DMA0_CLK>;
+};
+
+&dma1 {
+	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_DMA1_CLK>;
+};
+
+&dma2 {
+	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_DMA1_CLK>;
+};
+
+&spdifrx {
+	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_SPDIFRX_CLK>, <&scmi0_clock AT91_SCMI_CLK_GCK_SPDIFRX_GCLK>;
+};
+
+&spdiftx {
+	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_SPDIFTX_CLK>, <&scmi0_clock AT91_SCMI_CLK_GCK_SPDIFRX_GCLK>;
 };
