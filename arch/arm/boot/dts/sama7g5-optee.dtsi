@@ -136,11 +136,11 @@
 &i2c1  { clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_FLX1_CLK>; };
 
 &flx3 {
-	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_UART3_CLK>;
+	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_FLX3_CLK>;
 };
 
 &uart3 {
-	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_UART3_CLK>;
+	clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_FLX3_CLK>;
 };
 
 &flx4  { clocks = <&scmi0_clock AT91_SCMI_CLK_PERIPH_FLX4_CLK>; };
